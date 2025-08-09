@@ -313,5 +313,17 @@
 
     render();
   </script>
+
+<!-- SCRIPT AUTO-RESIZE -->
+<script>
+  function sendHeight(){
+    const h = document.body.scrollHeight;
+    parent.postMessage({hubHeight: h}, "*");
+  }
+  window.addEventListener("load", sendHeight);
+  window.addEventListener("resize", sendHeight);
+  setInterval(sendHeight, 500);
+</script>
+
 </body>
 </html>
