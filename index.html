@@ -1,593 +1,317 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cittadinanza Digitale Sicura • IIS Mendel</title>
-  <meta name="description" content="Percorso completo di cittadinanza digitale per docenti e studenti: phishing, password, social engineering, cyberbullismo, privacy/GDPR, sicurezza in classe e fake news.">
+  <title>IIS Mendel • Software gratuiti per studenti</title>
+  <meta name="description" content="Raccolta curata di software gratuiti e open source per studenti e docenti dell'IIS Mendel (agrario). Filtra per categoria e sistema operativo, con link a download e guide." />
   <style>
+    /* === Temi ============================================================ */
     :root{
-      --bg:#0b1020;          /* sfondo pagina */
-      --panel:#121936;       /* pannelli/sezioni */
-      --ink:#e8ecf8;         /* testo principale */
-      --muted:#a8b1c7;       /* testo secondario */
-      --accent:#84cc16;      /* lime */
-      --accent-2:#22d3ee;    /* cyan */
-      --danger:#ef4444;      /* rosso */
-      --warn:#f59e0b;        /* arancio */
-      --ok:#10b981;          /* verde */
-      --card:#0f172a;        /* box scuri */
+      --bg:#ffffff;        /* sfondo */
+      --card:#ffffff;      /* schede */
+      --ink:#0b1020;       /* testo principale */
+      --muted:#4b5563;     /* testo secondario */
+      --accent:#2563eb;    /* blu */
+      --accent-2:#16a34a;  /* verde */
+      --border:#e5e7eb;    /* grigio chiaro */
+      --chip:#f3f4f6;      /* bg chip/bottoni */
+      --chip-ink:#111827;
+      --logo-bg:#eef2ff;   /* sfondo logo */
+      --shadow: 0 6px 20px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    [data-theme="dark"]{
+      --bg:#0b1020;
+      --card:#121936;
+      --ink:#e8ecf8;
+      --muted:#a8b1c7;
+      --accent:#84cc16;
+      --accent-2:#22d3ee;
       --border:rgba(255,255,255,.12);
       --chip:rgba(255,255,255,.06);
+      --chip-ink:#e8ecf8;
+      --logo-bg:#0b1020;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-      --sidebar: 290px;
-      scroll-behavior:smooth;
     }
 
+    /* === Base ============================================================ */
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Inter,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      background:radial-gradient(1200px 600px at 10% -10%, #1c2a6b33, transparent 50%),
-                 radial-gradient(1200px 600px at 110% 10%, #0ea5e933, transparent 50%),
-                 var(--bg);
-      color:var(--ink);
-    }
-    a{color:var(--accent-2);text-decoration:none}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    img{max-width:100%}
+    header{position:sticky;top:0;z-index:50;background:color-mix(in oklab, var(--bg) 90%, transparent);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--border)}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 18px}
 
-    /* Layout */
-    .wrap{max-width:1200px;margin:0 auto;padding:18px}
-    .layout{
-      display:grid;
-      grid-template-columns: var(--sidebar) 1fr;
-      min-height:100dvh;
-    }
-
-    /* Sidebar */
-    .sidebar{
-      position:sticky; top:0; align-self:start;
-      height:100dvh; overflow:auto;
-      padding:18px; border-right:1px solid var(--border);
-      background:linear-gradient(180deg,#0d142f, #0b1020);
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center; margin-bottom:12px;
-    }
-    .brand .logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#0b1020; font-weight:900}
-    .brand h1{font-size:16px;margin:0;line-height:1.25}
+    /* === Brand & Toolbar ================================================ */
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand img{width:42px;height:42px;border-radius:10px;box-shadow:var(--shadow)}
+    .brand h1{font-size:18px;margin:0;line-height:1.2}
     .brand small{color:var(--muted)}
-    .open-full{
-      display:block; text-align:center; font-weight:800;
-      margin:14px 0 10px 0; padding:10px 14px; border-radius:10px;
-      color:#0b1020; background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      box-shadow:var(--shadow); border:0;
-    }
-    .open-full:hover{filter:brightness(1.05); text-decoration:none}
-    nav{margin-top:10px; display:flex; flex-direction:column; gap:6px}
-    .nav-link{
-      padding:10px 12px; border-radius:10px; color:var(--ink);
-      background:transparent; border:1px solid transparent; display:flex; gap:10px; align-items:center;
-    }
-    .nav-link:hover{background:var(--chip); text-decoration:none}
-    .nav-link.active{background:var(--chip); border-color:var(--border)}
-    .nav-link .dot{width:8px;height:8px;border-radius:999px;background:var(--accent-2);opacity:.9}
-    .hint{color:var(--muted); font-size:12px; margin-top:12px}
 
-    /* Mobile header + drawer */
-    .topbar{
-      display:none; position:sticky; top:0; z-index:50;
-      background:color-mix(in oklab, var(--bg) 90%, transparent);
-      backdrop-filter:saturate(180%) blur(8px);
-      border-bottom:1px solid var(--border);
-    }
-    .topbar .inner{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 16px}
-    .menu-btn{border:1px solid var(--border); background:var(--chip); color:var(--ink); border-radius:10px; padding:8px 10px; font-weight:700}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .right-tools{display:flex;gap:10px;align-items:center}
 
-    /* Main content */
-    main{padding:24px}
-    section{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); margin-bottom:16px}
-    .section-head{display:flex; align-items:center; gap:12px; margin-bottom:8px}
-    .section-head .badge{padding:6px 10px;border-radius:999px; font-size:12px; border:1px solid var(--border); color:var(--muted)}
-    .kicker{color:var(--muted); font-size:14px; margin:4px 0 12px 0}
-    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-    .card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px}
-    .card h4{margin:0 0 6px 0}
-    .tools{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-    .tool{background:var(--card); border:1px dashed color-mix(in oklab, var(--border) 70%, transparent); border-radius:12px; padding:12px}
-    .tool .head{display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:6px}
-    .tool .head a{display:inline-block; padding:6px 10px; border-radius:8px; background:var(--chip); color:var(--ink); font-weight:700}
-    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    .theme-btn{border:1px solid var(--border);background:var(--chip);color:var(--chip-ink);border-radius:999px;padding:8px 12px;font-weight:600;cursor:pointer}
+    .theme-btn:hover{filter:brightness(1.02)}
 
-    /* Lists speciali */
-    .steps{list-style:none; padding:0; margin:0; counter-reset:step}
-    .steps li{position:relative; padding:12px 12px 12px 48px; background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:8px}
-    .steps li::before{
-      content:counter(step); counter-increment:step; position:absolute; left:12px; top:50%; transform:translateY(-50%);
-      width:26px;height:26px;border-radius:50%; display:grid;place-items:center; font-weight:800; font-size:12px;
-      background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#0b1020;
-    }
-    .oklist{list-style:none; padding:10px 12px; background:#052a1733; border:1px solid #10b98133; border-radius:12px}
-    .oklist li{padding:8px 0 8px 32px; position:relative}
-    .oklist li::before{content:"OK"; position:absolute; left:0; top:8px; background:var(--ok); color:#0b1020; border-radius:999px; font-size:11px; font-weight:900; padding:3px 6px}
+    .toolbar{display:grid;grid-template-columns:1.6fr .9fr .9fr .9fr;gap:10px;margin-top:10px}
+    .toolbar input[type="search"], .toolbar select{background:var(--chip);border:1px solid var(--border);border-radius:12px;color:var(--ink);padding:12px 14px;font-size:15px;outline:none}
+    .toolbar input[type="search"]::placeholder{color:var(--muted)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .chip{padding:8px 12px;border-radius:999px;background:var(--chip);border:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--chip-ink)}
+    .chip.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#ffffff;font-weight:600;border-color:transparent}
 
-    /* Media embed */
-    .embed{position:relative; padding-top:56.25%; border-radius:14px; overflow:hidden; border:1px solid var(--border); background:#000}
-    .embed iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+    /* === Layout griglia ================================================== */
+    main{padding:16px 18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)} .toolbar{grid-template-columns:1fr 1fr 1fr;}}
+    @media (max-width:680px){.grid{grid-template-columns:1fr} .toolbar{grid-template-columns:1fr 1fr} .hide-sm{display:none}}
 
-    /* Footer */
-    footer{color:var(--muted); font-size:13px; padding:22px; text-align:center}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .title{display:flex;gap:10px;align-items:center}
+    .title .logo{width:36px;height:36px;border-radius:10px;flex:0 0 auto;background:var(--logo-bg);display:grid;place-items:center;font-weight:700;color:var(--accent)}
+    .title h3{margin:0;font-size:17px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{padding:6px 10px;border-radius:999px;border:1px dashed color-mix(in oklab, var(--border) 70%, transparent);font-size:12px;color:var(--muted)}
+    .desc{color:var(--ink);opacity:.9;font-size:14px;line-height:1.45}
+    .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--border);border-radius:12px;padding:9px 12px;color:var(--chip-ink);font-weight:600}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#ffffff;border-color:transparent}
+    .btn:hover{filter:brightness(1.02)}
 
-    /* Responsive */
-    @media (max-width:1100px){ .grid, .tools{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:900px){
-      .layout{grid-template-columns:1fr}
-      .sidebar{display:none}
-      .topbar{display:block}
-      .grid, .tools{grid-template-columns:1fr}
-    }
-
-    /* Back to top */
-    .totop{position:fixed; right:14px; bottom:14px; padding:10px 12px; background:var(--chip); border:1px solid var(--border); color:var(--ink);
-      border-radius:999px; display:none; font-weight:800}
-    .totop.show{display:inline-flex}
+    .kicker{font-size:12px;color:var(--muted)}
+    .pill{padding:2px 8px;border-radius:999px;border:1px solid var(--border);}
+    .footer{color:var(--muted);font-size:13px;margin-top:22px}
+    .footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="inner">
-      <strong>IIS Mendel • Cittadinanza Digitale</strong>
-      <button id="openMenu" class="menu-btn" aria-controls="drawer" aria-expanded="false">☰ Menu</button>
-    </div>
-  </div>
-
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="drawer" aria-label="Navigazione laterale">
-      <div class="brand">
-        <div class="logo">CD</div>
-        <div>
-          <h1>Cittadinanza Digitale Sicura</h1>
-          <small>IIS Mendel – Progetto “Buone Pratiche” PNRR</small>
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand" aria-label="Intestazione IIS Mendel - Software gratuiti">
+          <img src="https://agrariomendel.edu.it/templates/it_monte/img/logo.png" alt="Logo IIS Mendel" onerror="this.style.display='none'"/>
+          <div>
+            <h1>IIS Mendel • Software gratuiti per studenti</h1>
+            <small>Selezione curata per il nostro istituto tecnico e professionale agrario. Progetto <strong>Buone Pratiche</strong> PNRR "Scuola Futura".</small>
+          </div>
+        </div>
+        <div class="right-tools">
+          <!-- Pulsante tema in alto a destra -->
+          <button id="themeToggle" class="theme-btn" aria-label="Cambia tema" title="Tema chiaro/scuro">🌙</button>
         </div>
       </div>
+      <div class="toolbar" role="region" aria-label="Filtri principali">
+        <input id="q" type="search" placeholder="Cerca software (es. GIS, video, Office, PDF)…" aria-label="Cerca software" />
+        <select id="cat" aria-label="Filtra per categoria">
+          <option value="">Tutte le categorie</option>
+        </select>
+        <select id="os" aria-label="Filtra per sistema">
+          <option value="">Tutti i sistemi</option>
+          <option>Windows</option>
+          <option>macOS</option>
+          <option>Linux</option>
+          <option>Android</option>
+          <option>iOS</option>
+          <option>Web</option>
+        </select>
+        <select id="sort" aria-label="Ordina">
+          <option value="name">Ordina: A → Z</option>
+          <option value="category">Ordina per categoria</option>
+        </select>
+      </div>
+      <div class="chips" id="chips" aria-label="Selettori rapidi"></div>
+    </div>
+  </header>
 
-      <!-- Pulsante apri a tutto schermo -->
-      <a class="open-full" id="openFullBtn" href="https://massicrespi.github.io/Cybersicurezza_IIS-MENDEL/" target="_blank" rel="noopener">
-        Apri la webapp a tutto schermo ↗
-      </a>
+  <main class="wrap">
+    <p class="kicker">Tutto il software elencato è <span class="pill">gratuito</span> (spesso anche <span class="pill">open source</span>) o offre <span class="pill">piani free</span>. Dove esistono versioni a pagamento con funzioni extra, lo indichiamo nelle note.</p>
+    <div id="grid" class="grid" aria-live="polite"></div>
 
-      <!-- Indice -->
-      <nav id="toc">
-        <a class="nav-link" href="#intro"><span class="dot"></span>Introduzione</a>
-        <a class="nav-link" href="#phishing"><span class="dot"></span>Phishing</a>
-        <a class="nav-link" href="#password"><span class="dot"></span>Password & 2FA</a>
-        <a class="nav-link" href="#social"><span class="dot"></span>Social Engineering</a>
-        <a class="nav-link" href="#cyberbullismo"><span class="dot"></span>Cyberbullismo & Benessere</a>
-        <a class="nav-link" href="#privacy"><span class="dot"></span>Normativa & Privacy (GDPR)</a>
-        <a class="nav-link" href="#classe"><span class="dot"></span>Sicurezza in Classe</a>
-        <a class="nav-link" href="#news"><span class="dot"></span>Fake News</a>
-      </nav>
-
-      <div class="hint">Suggerimento: premi <strong>Ctrl/Cmd + F</strong> per cercare nella pagina.</div>
-    </aside>
-
-    <!-- Contenuti -->
-    <main>
-      <!-- Introduzione -->
-      <section id="intro" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Benvenuti 👋</h2>
-          <span class="badge">Percorso scuola 2025</span>
-        </div>
-        <p class="kicker">Formazione completa per docenti e studenti dell’era digitale. Materiali pronti all’uso, esempi reali, strumenti testati. Tutti i link esterni si aprono in una nuova scheda.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Video introduttivo</h4>
-            <div class="embed">
-              <!-- Sostituisci l’URL con il tuo video YouTube o Drive -->
-              <iframe src="https://www.youtube.com/embed/_uQrJ0TkZlc" title="Introduzione alla cittadinanza digitale" allowfullscreen loading="lazy"></iframe>
-            </div>
-            <p class="kicker">Suggerimento: carica il tuo video dell’istituto e sostituisci il link.</p>
-          </div>
-          <div class="card">
-            <h4>Infografica interattiva</h4>
-            <div class="embed" style="padding-top:70%">
-              <!-- Incolla qui l’embed di Canva/Genially oppure usa un’immagine -->
-              <iframe src="https://www.canva.com/design/DAFv1n3z0eA/view?embed" title="Infografica cittadinanza digitale" loading="lazy"></iframe>
-            </div>
-            <p class="kicker">Se il tuo CMS blocca embed esterni, metti un link testuale diretto sotto.</p>
-          </div>
-          <div class="card">
-            <h4>Obiettivi del percorso</h4>
-            <ul class="oklist">
-              <li>Padroneggiare le minacce comuni (phishing, social engineering, disinformazione).</li>
-              <li>Adottare buone pratiche: password solide, 2FA, igiene digitale.</li>
-              <li>Conoscere i riferimenti normativi (GDPR, Garante Privacy, policy scolastiche).</li>
-              <li>Promuovere benessere digitale e prevenzione del cyberbullismo.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- PHISHING -->
-      <section id="phishing" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Phishing</h2>
-          <span class="badge">Email trappola</span>
-        </div>
-        <p class="kicker">Email o messaggi che imitano servizi reali per rubare credenziali o installare malware.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Come funziona</h4>
-            <ol class="steps">
-              <li>Email/SMS imitano mittenti noti (banca, scuola, corrieri, INPS).</li>
-              <li>Link porta a sito clone quasi identico all’originale.</li>
-              <li>L’utente inserisce credenziali o dati personali.</li>
-              <li>I dati vengono usati per accessi non autorizzati o rivenduti.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Come proteggersi</h4>
-            <ul class="oklist">
-              <li>Controlla sempre mittente e dominio (non solo il nome visualizzato).</li>
-              <li>Non cliccare link sospetti: digita l’indirizzo a mano.</li>
-              <li>Verifica il lucchetto HTTPS e il certificato, ma non fidarti solo di quello.</li>
-              <li>Attiva la 2FA sugli account critici (posta, registro elettronico).</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Strumenti utili</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Google Phishing Quiz</strong><a href="https://phishingquiz.withgoogle.com/" target="_blank" rel="noopener">Apri ↗</a></div>
-                <p>Quiz interattivo per allenarsi su esempi reali.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>VirusTotal</strong><a href="https://www.virustotal.com/" target="_blank" rel="noopener">Scansiona ↗</a></div>
-                <p>Controllo di URL e allegati con decine di motori.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Trend Micro Site Safety</strong><a href="https://global.sitesafety.trendmicro.com/" target="_blank" rel="noopener">Verifica ↗</a></div>
-                <p>Reputazione di siti e domini sospetti.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PASSWORD -->
-      <section id="password" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Password & Autenticazione</h2>
-          <span class="badge">Account sicuri</span>
-        </div>
-        <p class="kicker">La 2FA blocca oltre il 90% degli accessi indesiderati. Password lunghe e univoche sono fondamentali.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Buone pratiche</h4>
-            <ul class="oklist">
-              <li>Minimo 12–14 caratteri, frase segreta facile da ricordare.</li>
-              <li>Una password diversa per ogni servizio importante.</li>
-              <li>Attiva 2FA (app OTP o chiave hardware) dove possibile.</li>
-              <li>Usa un password manager affidabile (Bitwarden, 1Password, KeePassXC).</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Evita questi errori</h4>
-            <ol class="steps">
-              <li>Riutilizzare la stessa password su più siti.</li>
-              <li>Condividerla per email/WhatsApp o salvarla in chiaro.</li>
-              <li>Usare dati personali (date, nomi) o parole del dizionario.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Strumenti consigliati</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Bitwarden</strong><a href="https://bitwarden.com/" target="_blank" rel="noopener">Sito ↗</a></div>
-                <p>Manager open source multipiattaforma.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Have I Been Pwned</strong><a href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Controlla ↗</a></div>
-                <p>Verifica violazioni legate alla tua email.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Security.org Tester</strong><a href="https://www.security.org/how-secure-is-my-password/" target="_blank" rel="noopener">Prova ↗</a></div>
-                <p>Stima della robustezza di una password.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SOCIAL ENGINEERING -->
-      <section id="social" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Social Engineering</h2>
-          <span class="badge">Manipolazione</span>
-        </div>
-        <p class="kicker">Attacchi che sfruttano fiducia, autorità e urgenza per spingerti a fare qualcosa contro i tuoi interessi.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Scenari tipici</h4>
-            <ol class="steps">
-              <li>Vishing: finto tecnico IT che chiede la password “per un controllo”.</li>
-              <li>Smishing: SMS di corrieri/multe con link a pagamenti urgenti.</li>
-              <li>Pretexting: email del “dirigente” che chiede dati sensibili.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Come difendersi</h4>
-            <ul class="oklist">
-              <li>Verifica identità su canale alternativo (telefono ufficiale).</li>
-              <li>Prenditi tempo: gli attaccanti spingono alla fretta.</li>
-              <li>Non condividere OTP, password o link di recupero.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Risorse</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>KnowBe4 – Phishing test</strong><a href="https://www.knowbe4.com/free-phishing-test" target="_blank" rel="noopener">Test ↗</a></div>
-                <p>Valuta la prontezza della scuola.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>SANS Awareness</strong><a href="https://www.sans.org/security-awareness-training/" target="_blank" rel="noopener">Formazione ↗</a></div>
-                <p>Programmi per il personale scolastico.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Privacy Checkup</strong><a href="https://privacycheckup.com/" target="_blank" rel="noopener">Controlla ↗</a></div>
-                <p>Impostazioni di privacy sui social.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CYBERBULLISMO & BENESSERE -->
-      <section id="cyberbullismo" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Cyberbullismo & Benessere Digitale</h2>
-          <span class="badge">Comportamenti online</span>
-        </div>
-        <p class="kicker">Prevenzione, segnalazione e supporto per la tutela in rete di studenti e docenti.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Segnali di allarme</h4>
-            <ol class="steps">
-              <li>Calo improvviso nel rendimento/partecipazione.</li>
-              <li>Isolamento, paura di usare dispositivi o partecipare alle chat.</li>
-              <li>Contenuti offensivi, meme denigratori, condivisione non consensuale.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Cosa fare subito</h4>
-            <ul class="oklist">
-              <li>Raccogli prove (screenshot, URL, orari); non rispondere alle provocazioni.</li>
-              <li>Blocca e segnala all’interno della piattaforma.</li>
-              <li>Rivolgiti al referente d’istituto e, se serve, alle autorità.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Aiuto & risorse</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Generazioni Connesse</strong><a href="https://www.generazioniconnesse.it/" target="_blank" rel="noopener">Portale ↗</a></div>
-                <p>Programma nazionale per le scuole su sicurezza online.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Telefono Azzurro</strong><a href="https://azzurro.it/" target="_blank" rel="noopener">Supporto ↗</a></div>
-                <p>Ascolto e intervento per minori: 1.96.96 / 114.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Benessere Digitale</strong><a href="https://wellbeing.google/" target="_blank" rel="noopener">Strumenti ↗</a></div>
-                <p>Gestione tempo schermo e notifiche.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- NORMATIVA & PRIVACY -->
-      <section id="privacy" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Normativa & Privacy (GDPR)</h2>
-          <span class="badge">Riferimenti</span>
-        </div>
-        <p class="kicker">Linee guida per un uso conforme nelle scuole: dati personali, consenso, policy e registro trattamenti.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Punti chiave a scuola</h4>
-            <ul class="oklist">
-              <li>Minimizzazione: raccogli solo i dati necessari per la didattica.</li>
-              <li>Trasparenza: informativa chiara a studenti e famiglie.</li>
-              <li>Sicurezza: controllo accessi, backup, cifratura dove possibile.</li>
-              <li>Data breach: procedure di segnalazione interne e al Garante.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Modelli utili</h4>
-            <ol class="steps">
-              <li>Registro delle attività di trattamento dell’Istituto.</li>
-              <li>Informative per attività didattiche e uscite digitali.</li>
-              <li>Policy sull’uso dei dispositivi personali (BYOD) e piattaforme.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Approfondimenti</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Garante Privacy – Scuola</strong><a href="https://www.garanteprivacy.it/scuola" target="_blank" rel="noopener">Linee guida ↗</a></div>
-                <p>Indicazioni ufficiali per istituzioni scolastiche.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>EDPB</strong><a href="https://edpb.europa.eu/edpb_it" target="_blank" rel="noopener">Comitato UE ↗</a></div>
-                <p>Raccomandazioni europee sull’applicazione del GDPR.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>AgID – Linee di indirizzo</strong><a href="https://www.agid.gov.it/" target="_blank" rel="noopener">AgID ↗</a></div>
-                <p>Standard e sicurezza per la PA, utili anche alle scuole.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SICUREZZA IN CLASSE -->
-      <section id="classe" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Sicurezza in Classe</h2>
-          <span class="badge">Ambiente digitale</span>
-        </div>
-        <p class="kicker">Policy chiare, strumenti approvati, formazione continua e controlli proporzionati.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Best practice</h4>
-            <ul class="oklist">
-              <li>Account individuali e ruoli differenziati (docenti/studenti/ATA).</li>
-              <li>Registro attività e condivisioni solo con gruppi della classe.</li>
-              <li>Software aggiornato (sistema, browser, estensioni).</li>
-              <li>Backup periodico dei materiali didattici.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Esempio BYOD</h4>
-            <ol class="steps">
-              <li>Richiesta adesione famiglie + policy d’uso.</li>
-              <li>Rete separata per ospiti/studenti con filtraggio contenuti.</li>
-              <li>Formazione di base su sicurezza e privacy.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Strumenti scuola</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Google Workspace Education</strong><a href="https://edu.google.com/workspace-for-education/" target="_blank" rel="noopener">Info ↗</a></div>
-                <p>Suite cloud con controlli amministrativi.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Microsoft 365 Education</strong><a href="https://www.microsoft.com/it-it/education/products/office" target="_blank" rel="noopener">Scopri ↗</a></div>
-                <p>Gestione dispositivi e protezione dati.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Garante – Sezione Scuola</strong><a href="https://www.garanteprivacy.it/scuola" target="_blank" rel="noopener">Linee guida ↗</a></div>
-                <p>Indicazioni su foto, video, piattaforme.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAKE NEWS -->
-      <section id="news" class="wrap">
-        <div class="section-head">
-          <h2 style="margin:0">Fake News & Disinformazione</h2>
-          <span class="badge">Pensiero critico</span>
-        </div>
-        <p class="kicker">Riconoscere contenuti manipolati, verificare le fonti, evitare la condivisione impulsiva.</p>
-
-        <div class="grid">
-          <div class="card">
-            <h4>Come si propagano</h4>
-            <ol class="steps">
-              <li>Titoli emotivi e shock per catturare attenzione.</li>
-              <li>Uso di immagini fuori contesto o ritoccate.</li>
-              <li>Amplificazione tramite bot e gruppi chiusi.</li>
-            </ol>
-          </div>
-          <div class="card">
-            <h4>Come difendersi</h4>
-            <ul class="oklist">
-              <li>Cerca conferme da più testate autorevoli.</li>
-              <li>Controlla la data e il contesto originale.</li>
-              <li>Fai reverse image search su foto dubbie.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h4>Strumenti di verifica</h4>
-            <div class="tools">
-              <div class="tool">
-                <div class="head"><strong>Bufale.net</strong><a href="https://www.bufale.net/" target="_blank" rel="noopener">Verifica ↗</a></div>
-                <p>Debunking in italiano.</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>Snopes</strong><a href="https://www.snopes.com/" target="_blank" rel="noopener">Ricerca ↗</a></div>
-                <p>Fact‑checking storico (EN).</p>
-              </div>
-              <div class="tool">
-                <div class="head"><strong>TinEye</strong><a href="https://tineye.com/" target="_blank" rel="noopener">Immagini ↗</a></div>
-                <p>Ricerca inversa immagini.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Torna su -->
-      <a href="#intro" class="totop" id="toTop" aria-label="Torna all’inizio">↑</a>
-
-      <!-- Footer -->
-      <footer>
-        IIS Mendel – Villa Cortese • Progetto “Buone Pratiche” PNRR “Scuola Futura”<br>
-        © 2025 • Tutti i diritti riservati • <a href="https://massicrespi.github.io/Cybersicurezza_IIS-MENDEL/" target="_blank" rel="noopener">Apri la webapp a tutto schermo</a>
-      </footer>
-    </main>
-  </div>
-
-  <noscript style="display:block; text-align:center; padding:12px; color:#fff; background:#b91c1c">
-    Attiva JavaScript per la migliore esperienza.
-  </noscript>
+    <div class="footer">
+      <div class="footer-note">
+        IIS Mendel - Via Ferrazzi 15 20035 Villa Cortese (MI) - Progetto "Buone pratiche" PNRR "Scuola Futura" - Sviluppato dal Team Buone Pratiche IIS MENDEL
+      </div>
+    </div>
+  </main>
 
   <script>
-    // ——— Configura qui il link "a tutto schermo" (GitHub Pages) ———
-    const FULL_URL = "https://massicrespi.github.io/Cybersicurezza_IIS-MENDEL/";
-    document.getElementById('openFullBtn').href = FULL_URL;
-
-    // Attiva link esterni in nuova scheda
-    for(const a of document.querySelectorAll('a[href^="http"]')){
-      if(!a.closest('.sidebar .nav-link')){ a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); }
-    }
-
-    // Evidenzia voce di menu attiva durante lo scroll
-    const links = [...document.querySelectorAll('.nav-link')];
-    const sections = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
-    const onScroll = () => {
-      let idx = 0, fromTop = window.scrollY + 120;
-      for(let i=0;i<sections.length;i++){
-        if(sections[i].offsetTop <= fromTop) idx = i;
+    // === Tema: preferenze e toggle ========================================
+    (function(){
+      const root = document.documentElement;
+      const saved = localStorage.getItem('mendel-theme');
+      if(saved){ root.setAttribute('data-theme', saved); }
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+        root.setAttribute('data-theme','dark');
       }
-      links.forEach(l=>l.classList.remove('active'));
-      links[idx]?.classList.add('active');
-      document.getElementById('toTop').classList.toggle('show', window.scrollY > 400);
-    };
-    window.addEventListener('scroll', onScroll); onScroll();
-
-    // Mobile: apri/chiudi sidebar come drawer
-    const btn = document.getElementById('openMenu');
-    const drawer = document.getElementById('drawer');
-    if(btn){
-      btn.addEventListener('click', ()=>{
-        const open = drawer.style.display !== 'block';
-        drawer.style.display = open ? 'block' : 'none';
-        btn.setAttribute('aria-expanded', String(open));
+      const btn = document.getElementById('themeToggle');
+      const setIcon = ()=>{ btn.textContent = root.getAttribute('data-theme')==='dark' ? '☀️' : '🌙'; };
+      setIcon();
+      btn.addEventListener('click',()=>{
+        const next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('mendel-theme', next);
+        setIcon();
       });
-      // Chiudi il drawer quando clicco un link
-      document.querySelectorAll('#toc a').forEach(a => a.addEventListener('click', ()=> {
-        if(window.innerWidth <= 900){ drawer.style.display = 'none'; btn.setAttribute('aria-expanded','false'); }
-      }));
+    })();
+
+    // === Dataset ===========================================================
+    const APPS = [
+      // Suite Office / Documenti
+      { name:"LibreOffice", category:"Suite Office", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"L", description:"Suite completa (Writer, Calc, Impress). Compatibile con .docx/.xlsx/.pptx.", download:"https://www.libreoffice.org/download/download-libreoffice/", guides:[{label:"Sito ufficiale", url:"https://www.libreoffice.org/"}], notes:"100% gratis e open source." },
+      { name:"ONLYOFFICE Desktop Editors", category:"Suite Office", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"OO", description:"Editor moderni per documenti, fogli, presentazioni; ottima compatibilità MS Office.", download:"https://www.onlyoffice.com/desktop.aspx", guides:[{label:"Download/aiuto", url:"https://www.onlyoffice.com/download-desktop.aspx"}] },
+      { name:"WPS Office (Free)", category:"Suite Office", type:"Desktop/Mobile", platforms:["Windows","macOS","Android","iOS"], logo:"W", description:"Alternativa leggera a Office con Writer/Spreadsheet/Presentation e PDF.", download:"https://www.wps.com/download/", guides:[{label:"Sito", url:"https://www.wps.com/"}] },
+      { name:"Microsoft 365 per il Web", category:"Documenti Online", type:"Web", platforms:["Web"], logo:"MS", description:"Word, Excel, PowerPoint gratuiti nel browser con account Microsoft.", download:"https://www.microsoft.com/en-us/microsoft-365/free-office-online-for-the-web", guides:[{label:"Word online", url:"https://www.office.com/"}] },
+      { name:"Google Docs", category:"Documenti Online", type:"Web", platforms:["Web"], logo:"G", description:"Videoscrittura collaborativa nel browser. Richiede account Google.", download:"https://workspace.google.com/products/docs/", guides:[{label:"Avvia nel browser", url:"https://www.geogebra.org/classic"}] },
+
+      // PDF
+      { name:"PDF24 Creator", category:"PDF", type:"Desktop", platforms:["Windows"], logo:"P24", description:"Crea, unisci, comprimi, firma PDF. Molti strumenti anche offline.", download:"https://tools.pdf24.org/en/creator", guides:[{label:"PDF24 online tools", url:"https://www.pdf24.org/en/"}] },
+      { name:"Foxit PDF Reader (Free)", category:"PDF", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Android","iOS","Web"], logo:"Fx", description:"Lettore PDF veloce con annotazioni e compilazione moduli.", download:"https://www.foxit.com/pdf-reader/", guides:[{label:"Foxit Online Editor", url:"https://www.foxit.com/pdf-editor/"}] },
+      { name:"SumatraPDF", category:"PDF", type:"Desktop", platforms:["Windows"], logo:"S", description:"Lettore PDF/EPUB leggerissimo e portabile per Windows.", download:"https://www.sumatrapdfreader.org/download-free-pdf-viewer.html", guides:[{label:"Homepage", url:"https://www.sumatrapdfreader.org/free-pdf-reader.html"}] },
+
+      // Grafica
+      { name:"GIMP", category:"Grafica (Raster)", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"G", description:"Editor immagini avanzato, alternativa libera a Photoshop.", download:"https://www.gimp.org/downloads/", guides:[{label:"Documentazione", url:"https://www.gimp.org/docs/"}] },
+      { name:"Krita", category:"Grafica (Raster)", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"K", description:"Pittura digitale e illustrazione. Ottimo per tavolette grafiche.", download:"https://krita.org/en/download/", guides:[{label:"Sito", url:"https://krita.org/en/"}] },
+      { name:"Inkscape", category:"Grafica (Vettoriale)", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"I", description:"Grafica vettoriale (SVG). Alternativa a Illustrator/CorelDraw.", download:"https://inkscape.org/release/", guides:[{label:"Wiki Installazione", url:"https://wiki.inkscape.org/wiki/Installing_Inkscape"}] },
+
+      // 3D / CAD
+      { name:"Blender", category:"3D / Video", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"B", description:"3D modeling, VFX, rendering e video-editing (gratuito e professionale).", download:"https://www.blender.org/download/", guides:[{label:"Indice release", url:"https://download.blender.org/release/"}] },
+      { name:"FreeCAD", category:"CAD / 3D", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"FC", description:"Modeler 3D parametrico per oggetti reali. Ideale per meccanica e prototipi.", download:"https://www.freecad.org/downloads.php", guides:[{label:"Repo GitHub", url:"https://github.com/FreeCAD/FreeCAD"}] },
+
+      // GIS & Agricoltura
+      { name:"QGIS", category:"GIS & Agricoltura", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"Q", description:"GIS open source per mappe, analisi spaziale e gestione dati territoriali.", download:"https://qgis.org/download/", guides:[{label:"Documentazione", url:"https://qgis.org/"}] },
+      { name:"QField (per QGIS)", category:"GIS & Agricoltura", type:"Mobile/Desktop", platforms:["Android","iOS","Windows"], logo:"QF", description:"Rilevamento dati in campo con progetti QGIS (online/offline).", download:"https://qfield.org/", guides:[{label:"Android", url:"https://play.google.com/store/apps/details?id=ch.opengis.qfield"},{label:"iOS", url:"https://apps.apple.com/us/app/qfield-for-qgis/id1531726814"}] },
+      { name:"AgOpenGPS", category:"GIS & Agricoltura", type:"Desktop", platforms:["Windows"], logo:"AG", description:"Guida e tracciamento per mezzi agricoli con GPS/RTK (open source).", download:"https://github.com/AgOpenGPS/AgOpenGPS/releases", guides:[{label:"Documentazione", url:"https://agopengps.atlassian.net/wiki/"}] },
+      { name:"ESA SNAP", category:"GIS & Agricoltura", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"SN", description:"Elaborazione immagini satellitari (Sentinel, Landsat) per NDVI/indici vegetazione.", download:"https://step.esa.int/main/download/", guides:[{label:"Docs", url:"https://step.esa.int/main/doc/"}] },
+      { name:"SAGA GIS", category:"GIS & Agricoltura", type:"Desktop", platforms:["Windows","Linux","macOS"], logo:"SG", description:"Analisi geospaziale con moduli per geomorfologia, idrologia, raster.", download:"https://sourceforge.net/projects/saga-gis/files/", guides:[{label:"Sito", url:"http://www.saga-gis.org/"}] },
+      { name:"EO Browser (Sentinel Hub)", category:"GIS & Agricoltura", type:"Web", platforms:["Web"], logo:"EO", description:"Esplora e scarica immagini Sentinel/Landsat nel browser (piano free).", download:"https://apps.sentinel-hub.com/eo-browser/", guides:[{label:"Guida rapida", url:"https://docs.sentinel-hub.com/api/latest/eobrowser/"}] },
+      { name:"OpenDroneMap (ODM)", category:"GIS & Agricoltura", type:"Desktop/Server", platforms:["Windows","macOS","Linux"], logo:"ODM", description:"Elabora foto da drone in ortomosaici e modelli 3D (open source).", download:"https://github.com/OpenDroneMap/ODM/releases", guides:[{label:"Docs", url:"https://docs.opendronemap.org/"}] },
+      { name:"farmOS", category:"Gestione Azienda Agricola", type:"Web/Self‑host", platforms:["Web"], logo:"fO", description:"Gestione parcelle, colture, trattamenti e registrazioni. Open source.", download:"https://farmos.org/download/", guides:[{label:"Documentazione", url:"https://farmos.org/guide/"}], notes:"Richiede installazione su server proprio o hosting; esistono servizi cloud a pagamento." },
+
+      // Matematica & STEM
+      { name:"GeoGebra", category:"Matematica & STEM", type:"Desktop/Web/Mobile", platforms:["Windows","macOS","Linux","Android","iOS","Web"], logo:"GG", description:"Suite per algebra, geometria, 3D, statistiche. Ottimo per verifiche in classe.", download:"https://www.geogebra.org/download?lang=it", guides:[{label:"Avvia nel browser", url:"https://www.geogebra.org/classic"}] },
+      { name:"Arduino IDE", category:"Elettronica/Robotica", type:"Desktop/Web", platforms:["Windows","macOS","Linux","Web"], logo:"A", description:"IDE per programmare schede Arduino; disponibile anche editor cloud gratuito.", download:"https://www.arduino.cc/en/software", guides:[{label:"Guida installazione", url:"https://support.arduino.cc/hc/en-us/articles/360019833020-Download-and-install-Arduino-IDE"}] },
+
+      // Programmazione & IDE
+      { name:"Visual Studio Code", category:"Programmazione & IDE", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"VS", description:"Editor moderno con estensioni, Git e debug. Gratuito.", download:"https://code.visualstudio.com/download", guides:[{label:"Guida rapida", url:"https://code.visualstudio.com/docs"}] },
+      { name:"PyCharm Community", category:"Programmazione & IDE", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"Py", description:"IDE Python versione gratuita (Community).", download:"https://www.jetbrains.com/pycharm/download/", guides:[{label:"Guida installazione", url:"https://www.jetbrains.com/help/pycharm/installation-guide.html"}] },
+
+      // Video & Audio
+      { name:"DaVinci Resolve (Free)", category:"Video", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"DR", description:"Editing, color, VFX e audio professionali. Versione free molto completa.", download:"https://www.blackmagicdesign.com/products/davinciresolve/", guides:[{label:"Scarica", url:"https://www.blackmagicdesign.com/event/davinciresolvedownload"}] },
+      { name:"Shotcut", category:"Video", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"Sc", description:"Video editor open source semplice e potente.", download:"https://www.shotcut.org/download/", guides:[{label:"Tutorial", url:"https://www.shotcut.org/"}] },
+      { name:"Kdenlive", category:"Video", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"Kd", description:"Editor non-lineare completo e gratuito (progetto KDE).", download:"https://kdenlive.org/download/", guides:[{label:"Sito", url:"https://kdenlive.org/"}] },
+      { name:"OpenShot", category:"Video", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"OS", description:"Editor video facile per iniziare (tagli, transizioni, titoli).", download:"https://www.openshot.org/download/", guides:[{label:"Guida", url:"https://www.openshot.org/static/files/user-guide/installation.html"}] },
+      { name:"Audacity", category:"Audio", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"Au", description:"Editor/registratore audio multi‑traccia gratuito.", download:"https://www.audacityteam.org/downloads/", guides:[{label:"Guida installazione", url:"https://support.audacityteam.org/basics/downloading-and-installing-audacity"}] },
+
+      // Schermo & Utility
+      { name:"OBS Studio", category:"Schermo & Streaming", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"OBS", description:"Registrazione schermo e streaming (lezioni, tutorial).", download:"https://obsproject.com/download", guides:[{label:"Sito", url:"https://obsproject.com/"}] },
+      { name:"ShareX", category:"Schermo & Streaming", type:"Desktop", platforms:["Windows"], logo:"SX", description:"Cattura schermate, registrazione, GIF e condivisione rapida (Windows).", download:"https://getsharex.com/downloads", guides:[{label:"Homepage", url:"https://getsharex.com/"}] },
+      { name:"7‑Zip", category:"Utility", type:"Desktop", platforms:["Windows"], logo:"7z", description:"Compressione/estrazione archivi (7z, zip, rar…).", download:"https://www.7-zip.org/download.html", guides:[{label:"Homepage", url:"https://www.7-zip.org/"}] },
+      { name:"PeaZip", category:"Utility", type:"Desktop", platforms:["Windows","Linux","macOS"], logo:"PZ", description:"Gestione archivi multi‑formato, alternativa a WinZip/WinRAR.", download:"https://peazip.github.io/peazip-64bit.html", guides:[{label:"Sito", url:"https://peazip.github.io/"}] },
+
+      // Appunti & Studio
+      { name:"Obsidian", category:"Appunti & Studio", type:"Desktop/Mobile", platforms:["Windows","macOS","Linux","Android","iOS"], logo:"Ob", description:"Note in Markdown e collegamenti tra idee (graph view). Piano personale gratuito.", download:"https://obsidian.md/download", guides:[{label:"Guida installazione", url:"https://help.obsidian.md/install"}] },
+      { name:"Joplin", category:"Appunti & Studio", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Linux","Android","iOS","Web"], logo:"Jo", description:"Note open source in Markdown con sincronizzazione (piani cloud opzionali).", download:"https://joplinapp.org/download/", guides:[{label:"Sito", url:"https://joplinapp.org/"}] },
+      { name:"Anki", category:"Appunti & Studio", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Linux","Android","iOS","Web"], logo:"Ak", description:"Flashcard con ripetizione dilazionata (spaced repetition) per memorizzare velocemente.", download:"https://apps.ankiweb.net/", guides:[{label:"Manuale", url:"https://docs.ankiweb.net/platform/windows/installing.html"}] },
+
+      // Accessibilità
+      { name:"NVDA (screen reader)", category:"Accessibilità", type:"Desktop", platforms:["Windows"], logo:"NV", description:"Lettore di schermo gratuito per Windows per studenti con disabilità visive.", download:"https://www.nvaccess.org/download/", guides:[{label:"Annuncio 2025.1", url:"https://www.nvaccess.org/post/nvda-2025-1/"}] },
+
+      // DSA / BES (lettura, mappe, dizionari, focus)
+      { name:"Balabolka (TTS)", category:"DSA / BES", type:"Desktop", platforms:["Windows"], logo:"Ba", description:"Legge ad alta voce testi e PDF con voci SAPI5, esporta in audio.", download:"https://www.cross-plus-a.com/balabolka.htm", guides:[{label:"Pagina ufficiale", url:"https://www.cross-plus-a.com/it/balabolka.htm"}] },
+      { name:"NaturalReader Online (Free)", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"NR", description:"Sintesi vocale nel browser con piano gratuito (limiti mensili).", download:"https://www.naturalreaders.com/online/", guides:[{label:"Guida rapida", url:"https://www.naturalreaders.com/online/"}] },
+      { name:"OpenDyslexic (font)", category:"DSA / BES", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Linux","Android","iOS","Web"], logo:"OD", description:"Font gratuito ad alta leggibilità per dislessia.", download:"https://opendyslexic.org/", guides:[{label:"Installazione", url:"https://opendyslexic.org/using-open-dyslexic/"}] },
+      { name:"LanguageTool (Free)", category:"DSA / BES", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Linux","Android","iOS","Web"], logo:"LT", description:"Correttore ortografico e grammaticale con estensioni per browser e Office.", download:"https://languagetool.org/it/download", guides:[{label:"Estensioni browser", url:"https://languagetool.org/services"}] },
+      { name:"IHMC CmapTools", category:"DSA / BES", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"CM", description:"Mappe concettuali per organizzare idee e studiare. Gratuito per scuole.", download:"https://cmap.ihmc.us/cmaptools/cmaptools-download/", guides:[{label:"Pagina prodotto", url:"https://cmap.ihmc.us/cmaptools/"}] },
+      { name:"diagrams.net (draw.io)", category:"DSA / BES", type:"Web/Desktop", platforms:["Web","Windows","macOS","Linux"], logo:"d.io", description:"Mappe concettuali, schemi e diagrammi. Gratis; disponibile anche offline.", download:"https://app.diagrams.net/", guides:[{label:"Download Desktop", url:"https://sourceforge.net/projects/diagrams-net.mirror/"}] },
+      { name:"MindMup (Free)", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"MM", description:"Mappe mentali online con piano gratuito (integrazione Google Drive).", download:"https://www.mindmup.com/", guides:[{label:"Scheda Workspace", url:"https://workspace.google.com/marketplace/app/mindmup_2_for_google_drive/758379822725"}] },
+      { name:"TTSReader", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"TTS", description:"Legge ad alta voce testi direttamente dal browser (molte lingue).", download:"https://ttsreader.com/", guides:[{label:"Apri TTSReader", url:"https://ttsreader.com/"}] },
+      { name:"Dictation.io", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"STT", description:"Dettatura vocale nel browser (speech‑to‑text) gratuita.", download:"https://dictation.io/", guides:[{label:"Guida rapida", url:"https://dictation.io/"}] },
+      { name:"GoldenDict", category:"DSA / BES", type:"Desktop", platforms:["Windows","macOS","Linux"], logo:"GD", description:"Dizionari offline multipli (WordNet e altri formati).", download:"https://goldendict.org/download.php", guides:[{label:"Sito progetto", url:"https://goldendict.org/"}] },
+      { name:"Artha (Thesaurus)", category:"DSA / BES", type:"Desktop", platforms:["Windows","Linux"], logo:"Ar", description:"Sinonimi/contrari offline basato su WordNet (EN).", download:"https://artha.sourceforge.net/wiki/index.php/Download", guides:[{label:"Homepage", url:"https://artha.sourceforge.net/"}] },
+      { name:"Reader Line (estensione)", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"RL", description:"Righello di lettura per evidenziare la riga corrente (Chrome).", download:"https://chromewebstore.google.com/detail/reader-line/fikijclmnnepcpijbljojpdaepikaicm", guides:[{label:"Alternativa simile", url:"https://chromewebstore.google.com/detail/readingline/bedndhimamenfipaocmhcpcickamhfnm"}] },
+      { name:"Read Aloud (estensione TTS)", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"RA", description:"Legge le pagine web ad alta voce (Chrome/Edge).", download:"https://chromewebstore.google.com/detail/read-aloud-a-text-to-speec/hdhinadidafjejdhmfkjgnolgimiaplp", guides:[{label:"Pagina Edge Add-ons", url:"https://microsoftedge.microsoft.com/addons/detail/read-aloud-a-text-to-speec/kokocglnjoijhhdfgapcckpbllmifckp"}] },
+      { name:"LeggiXme", category:"DSA / BES", type:"Desktop", platforms:["Windows"], logo:"LX", description:"Suite gratuita italiana per lettura con sintesi vocale e strumenti di supporto allo studio.", download:"https://www.leggixme.it/", guides:[{label:"Guida", url:"https://www.leggixme.it/"}] },
+      { name:"ClaroPDF Free", category:"DSA / BES", type:"Mobile", platforms:["Android","iOS"], logo:"CP", description:"App mobile per leggere PDF ad alta voce con evidenziazione sincronizzata.", download:"https://www.clarosoftware.com/portfolio/claropdf/", guides:[{label:"Pagina prodotto", url:"https://www.clarosoftware.com/portfolio/claropdf/"}] },
+      { name:"BeeLine Reader", category:"DSA / BES", type:"Web", platforms:["Web"], logo:"BR", description:"Facilita la lettura con sfumature di colore; piano free limitato/periodi di prova.", download:"https://www.beelinereader.com/", guides:[{label:"Info", url:"https://www.beelinereader.com/"}] },
+      { name:"Focus To‑Do", category:"DSA / BES", type:"Desktop/Mobile/Web", platforms:["Windows","macOS","Android","iOS","Web"], logo:"FT", description:"Tecnica del Pomodoro + Todo. Piano gratuito con funzioni base.", download:"https://www.focustodo.cn/", guides:[{label:"Sito", url:"https://www.focustodo.cn/"}] }
+    ];
+
+    // === Filtri + UI ======================================================
+    const CATS = [...new Set(APPS.map(a=>a.category))].sort();
+    const catSelect = document.querySelector('#cat');
+    CATS.forEach(c=>{const o=document.createElement('option');o.textContent=c;catSelect.appendChild(o)});
+
+    const QUICK = ["Suite Office","PDF","Grafica (Raster)","Grafica (Vettoriale)","CAD / 3D","GIS & Agricoltura","Matematica & STEM","Programmazione & IDE","Video","Audio","Schermo & Streaming","Utility","Appunti & Studio","Accessibilità","Gestione Azienda Agricola","DSA / BES"];
+    const chips = document.querySelector('#chips');
+    QUICK.forEach(c=>{const b=document.createElement('button');b.className='chip';b.textContent=c;b.onclick=()=>{document.querySelector('#cat').value=c; render()};chips.appendChild(b)});
+
+    const grid = document.querySelector('#grid');
+    const q=document.querySelector('#q');
+    const os=document.querySelector('#os');
+    const sort=document.querySelector('#sort');
+    catSelect.onchange = render; os.onchange=render; sort.onchange=render; q.oninput=()=>{render()};
+
+    function match(text, term){return text.toLowerCase().includes(term.toLowerCase())}
+
+    function render(){
+      const term = q.value.trim();
+      const cat = catSelect.value;
+      const platform = os.value;
+      const order = sort.value;
+
+      let data = APPS.filter(app=>{
+        const okTerm = !term || match(app.name,term) || match(app.description,term) || match(app.category,term);
+        const okCat = !cat || app.category===cat;
+        const okOS = !platform || app.platforms?.includes?.(platform) || (platform==='');
+        return okTerm && okCat && okOS;
+      });
+
+      data.sort((a,b)=>{
+        if(order==='category') return (a.category+a.name).localeCompare(b.category+b.name);
+        return a.name.localeCompare(b.name);
+      });
+
+      // update quick chips active state
+      [...chips.children].forEach(ch=>{
+        ch.classList.toggle('active', ch.textContent===cat);
+      });
+
+      grid.innerHTML = '';
+      if(!data.length){
+        grid.innerHTML = `<div class="card" role="status">Nessun risultato. Prova a cambiare i filtri o la ricerca.</div>`;
+        return;
+      }
+
+      for(const app of data){
+        const el=document.createElement('article');
+        el.className='card';
+        el.innerHTML = `
+          <div class="title">
+            <div class="logo">${app.logo||app.name[0]}</div>
+            <div>
+              <h3>${app.name}</h3>
+              <div class="meta">
+                <span class="pill">${app.category}</span>
+                ${app.type?`<span>${app.type}</span><span>•</span>`:''}
+                <span>${(app.platforms||['Web']).join(' · ')}</span>
+              </div>
+            </div>
+          </div>
+          <p class="desc">${app.description||''}</p>
+          <div class="tags">${(app.notes?`<span class='tag'>${app.notes}</span>`:'')}</div>
+          <div class="links">
+            <a class="btn primary" href="${app.download}" target="_blank" rel="noopener">⬇︎ Download / Apri</a>
+            ${app.guides?.map(g=>`<a class="btn" href="${g.url}" target="_blank" rel="noopener">📖 ${g.label}</a>`).join('')}
+          </div>
+        `;
+        grid.appendChild(el);
+      }
     }
+
+    render();
   </script>
 </body>
 </html>
